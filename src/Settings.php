@@ -149,6 +149,11 @@ final class Settings {
      * @return string
      */
     public function __toString() : string {
-        return self::CLASS;
+        return \sprintf(
+            '%s (uri=%s,project=%s)',
+                self::CLASS,
+                $this->uri,
+                $this->project
+        );
     }
 }
