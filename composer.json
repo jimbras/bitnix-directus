@@ -1,0 +1,35 @@
+{
+  "name": "bitnix/directus",
+  "description": "Bitnix Directus Client",
+  "type": "library",
+  "license": "AGPL-3.0",
+  "authors": [
+    { "name": "bitnix", "email": "bitnix@riseup.net" }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "ext-filter": "*",
+    "guzzlehttp/guzzle": "^6.5"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.5"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "Bitnix\\Directus\\" : "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Bitnix\\Directus\\" : "test/src"
+    }
+  },
+  "scripts": {
+    "test": "phpunit --colors=always -c test/phpunit.xml --coverage-html test/out",
+    "test-app": "phpunit --colors=always -c test/phpunit.xml --testsuit=app --coverage-html test/out",
+    "test-unit": "phpunit --colors=always -c test/phpunit.xml --testsuit=unit --coverage-html test/out"
+  }
+}
