@@ -17,8 +17,7 @@
 
 namespace Bitnix\Directus\Storage;
 
-use LogicException,
-    Bitnix\Directus\TokenStorage;
+use Bitnix\Directus\TokenStorage;
 
 /**
  * @version 0.1.0
