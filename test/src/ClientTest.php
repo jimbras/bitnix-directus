@@ -371,6 +371,235 @@ class ClientTest extends TestCase {
         $this->client->createFile(__DIR__)->wait();
     }
 
+    public function testUpdateFile() {
+        $this->login();
+        $this->handler = function(Request $request, array $options) {
+            $this->assertEquals('PATCH', $request->getMethod());
+            $this->assertUri($request->getUri(), '/project/files/1', []);
+            return new FulfilledPromise(new Response(200, [], \json_encode([
+                'data' => ['id' => 1]
+            ])));
+        };
+        $this->client->updateFile(1, __FILE__)->wait();
+    }
+
+    public function testUpdateFileError() {
+        $this->expectException(ClientException::CLASS);
+        $this->handler = function(Request $request, array $options) {
+            throw new \Exception('kaput');
+        };
+        $this->client->updateFile(1, __FILE__)->wait();
+    }
+
+    public function testDeleteFile() {
+        $this->login();
+        $this->handler = function(Request $request, array $options) {
+            $this->assertEquals('DELETE', $request->getMethod());
+            return new FulfilledPromise(new Response(204));
+        };
+        $this->client->deleteFile(1)->wait();
+    }
+
+    public function testDeleteFileError() {
+        $this->expectException(ClientException::CLASS);
+        $this->handler = function(Request $request, array $options) {
+            throw new \Exception('kaput');
+        };
+        $this->client->deleteFile(1)->wait();
+    }
+
+    public function testGetFileRevisions() {
+        $this->login();
+        $this->handler = function(Request $request, array $options) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertUri($request->getUri(), '/project/files/1/revisions', ['foo' => 'bar']);
+            return new FulfilledPromise(new Response(200, [], \json_encode([
+                'data' => []
+            ])));
+        };
+        $this->client->getFileRevisions(1, ['foo' => 'bar'])->wait();
+    }
+
+    public function testGetFileRevisionsError() {
+        $this->expectException(ClientException::CLASS);
+        $this->handler = function(Request $request, array $options) {
+            throw new \Exception('kaput');
+        };
+        $this->client->getFileRevisions(1, ['foo' => 'bar'])->wait();
+    }
+
+    public function testGetFileRevision() {
+        $this->login();
+        $this->handler = function(Request $request, array $options) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertUri($request->getUri(), '/project/files/1/revisions/2', ['foo' => 'bar']);
+            return new FulfilledPromise(new Response(200, [], \json_encode([
+                'data' => []
+            ])));
+        };
+        $this->client->getFileRevision(1, 2, ['foo' => 'bar'])->wait();
+    }
+
+    public function testGetFileRevisionError() {
+        $this->expectException(ClientException::CLASS);
+        $this->handler = function(Request $request, array $options) {
+            throw new \Exception('kaput');
+        };
+        $this->client->getFileRevision(1, 2, ['foo' => 'bar'])->wait();
+    }
+
+    public function testGetActivities() {
+        $this->login();
+        $this->handler = function(Request $request, array $options) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertUri($request->getUri(), '/project/activity', ['foo' => 'bar']);
+            return new FulfilledPromise(new Response(200, [], \json_encode([
+                'data' => []
+            ])));
+        };
+        $this->client->getActivities(['foo' => 'bar'])->wait();
+    }
+
+    public function testGetActivitiesError() {
+        $this->expectException(ClientException::CLASS);
+        $this->handler = function(Request $request, array $options) {
+            throw new \Exception('kaput');
+        };
+        $this->client->getActivities(['foo' => 'bar'])->wait();
+    }
+
+    public function testGetActivity() {
+        $this->login();
+        $this->handler = function(Request $request, array $options) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertUri($request->getUri(), '/project/activity/1', ['foo' => 'bar']);
+            return new FulfilledPromise(new Response(200, [], \json_encode([
+                'data' => []
+            ])));
+        };
+        $this->client->getActivity(1, ['foo' => 'bar'])->wait();
+    }
+
+    public function testGetActivityError() {
+        $this->expectException(ClientException::CLASS);
+        $this->handler = function(Request $request, array $options) {
+            throw new \Exception('kaput');
+        };
+        $this->client->getActivity(1, ['foo' => 'bar'])->wait();
+    }
+
+    public function testGetCollections() {
+        $this->login();
+        $this->handler = function(Request $request, array $options) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertUri($request->getUri(), '/project/collections', ['foo' => 'bar']);
+            return new FulfilledPromise(new Response(200, [], \json_encode([
+                'data' => []
+            ])));
+        };
+        $this->client->getCollections(['foo' => 'bar'])->wait();
+    }
+
+    public function testGetCollectionsError() {
+        $this->expectException(ClientException::CLASS);
+        $this->handler = function(Request $request, array $options) {
+            throw new \Exception('kaput');
+        };
+        $this->client->getCollections(['foo' => 'bar'])->wait();
+    }
+
+    public function testGetCollection() {
+        $this->login();
+        $this->handler = function(Request $request, array $options) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertUri($request->getUri(), '/project/collections/collection', ['foo' => 'bar']);
+            return new FulfilledPromise(new Response(200, [], \json_encode([
+                'data' => []
+            ])));
+        };
+        $this->client->getCollection('collection', ['foo' => 'bar'])->wait();
+    }
+
+    public function testGetCollectionError() {
+        $this->expectException(ClientException::CLASS);
+        $this->handler = function(Request $request, array $options) {
+            throw new \Exception('kaput');
+        };
+        $this->client->getCollection('collection', ['foo' => 'bar'])->wait();
+    }
+
+    public function testGetProjects() {
+        $this->login();
+        $this->handler = function(Request $request, array $options) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertUri($request->getUri(), '/server/projects', []);
+            return new FulfilledPromise(new Response(200, [], \json_encode([
+                'data' => []
+            ])));
+        };
+        $this->client->getProjects()->wait();
+    }
+
+    public function testGetProjectsError() {
+        $this->expectException(ClientException::CLASS);
+        $this->handler = function(Request $request, array $options) {
+            throw new \Exception('kaput');
+        };
+        $this->client->getProjects()->wait();
+    }
+
+    public function testGetUsers() {
+        $this->login();
+        $this->handler = function(Request $request, array $options) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertUri($request->getUri(), '/project/users', ['foo' => 'bar']);
+            return new FulfilledPromise(new Response(200, [], \json_encode([
+                'data' => []
+            ])));
+        };
+        $this->client->getUsers(['foo' => 'bar'])->wait();
+    }
+
+    public function testGetUsersError() {
+        $this->expectException(ClientException::CLASS);
+        $this->handler = function(Request $request, array $options) {
+            throw new \Exception('kaput');
+        };
+        $this->client->getUsers(['foo' => 'bar'])->wait();
+    }
+
+    public function testGetCurrentUser() {
+        $this->login();
+        $this->handler = function(Request $request, array $options) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertUri($request->getUri(), '/project/users/me');
+            return new FulfilledPromise(new Response(200, [], \json_encode([
+                'data' => []
+            ])));
+        };
+        $this->client->getUser()->wait();
+    }
+
+    public function testGetUser() {
+        $this->login();
+        $this->handler = function(Request $request, array $options) {
+            $this->assertEquals('GET', $request->getMethod());
+            $this->assertUri($request->getUri(), '/project/users/666', ['foo' => 'bar']);
+            return new FulfilledPromise(new Response(200, [], \json_encode([
+                'data' => []
+            ])));
+        };
+        $this->client->getUser(666, ['foo' => 'bar'])->wait();
+    }
+
+    public function testGetUserError() {
+        $this->expectException(ClientException::CLASS);
+        $this->handler = function(Request $request, array $options) {
+            throw new \Exception('kaput');
+        };
+        $this->client->getUser()->wait();
+    }
+
     public function testToString() {
         $this->assertIsString((string) $this->client);
     }
